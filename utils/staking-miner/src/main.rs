@@ -566,6 +566,18 @@ async fn main() {
 				RUNTIME = AnyRuntime::Kusama;
 			}
 		},
+		"kusama staging testnet" => {
+			sp_core::crypto::set_default_ss58_version(
+				sp_core::crypto::Ss58AddressFormatRegistry::KusamaAccount.into(),
+			);
+			sub_tokens::dynamic::set_name("UNIT");
+			sub_tokens::dynamic::set_decimal_points(1_000_000_000_000);
+			// safety: this program will always be single threaded, thus accessing global static is
+			// safe.
+			unsafe {
+				RUNTIME = AnyRuntime::Kusama;
+			}
+		},
 		"westend" => {
 			sp_core::crypto::set_default_ss58_version(
 				sp_core::crypto::Ss58AddressFormatRegistry::PolkadotAccount.into(),

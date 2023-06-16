@@ -23,7 +23,8 @@
 use pallet_transaction_payment::CurrencyAdapter;
 use runtime_common::{
 	auctions, claims, crowdloan, impl_runtime_weights, impls::DealWithFees, paras_registrar,
-	prod_or_fast, slots, BlockHashCount, BlockLength, CurrencyToVote, SlowAdjustingFeeUpdate,
+	paras_sudo_wrapper, prod_or_fast, slots, BlockHashCount, BlockLength, CurrencyToVote,
+	SlowAdjustingFeeUpdate,
 };
 
 use runtime_parachains::{
@@ -1278,6 +1279,8 @@ impl frame_support::traits::OnRuntimeUpgrade for InitiateNominationPools {
 	}
 }
 
+impl paras_sudo_wrapper::Config for Runtime {}
+
 construct_runtime! {
 	pub enum Runtime where
 		Block = Block,
@@ -1381,6 +1384,8 @@ construct_runtime! {
 
 		// Pallet for sending XCM.
 		XcmPallet: pallet_xcm::{Pallet, Call, Storage, Event<T>, Origin, Config} = 99,
+
+		ParasSudoWrapper: paras_sudo_wrapper::{Pallet, Call} = 250,
 	}
 }
 

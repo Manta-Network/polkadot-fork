@@ -31,8 +31,8 @@ use primitives::{
 };
 use runtime_common::{
 	auctions, claims, crowdloan, impl_runtime_weights, impls::DealWithFees, paras_registrar,
-	prod_or_fast, slots, BalanceToU256, BlockHashCount, BlockLength, CurrencyToVote,
-	SlowAdjustingFeeUpdate, U256ToBalance,
+	paras_sudo_wrapper, prod_or_fast, slots, BalanceToU256, BlockHashCount, BlockLength,
+	CurrencyToVote, SlowAdjustingFeeUpdate, U256ToBalance,
 };
 use scale_info::TypeInfo;
 use sp_std::{cmp::Ordering, collections::btree_map::BTreeMap, prelude::*};
@@ -1306,6 +1306,8 @@ impl pallet_nomination_pools::Config for Runtime {
 	type MaxPointsToBalance = MaxPointsToBalance;
 }
 
+impl paras_sudo_wrapper::Config for Runtime {}
+
 construct_runtime! {
 	pub enum Runtime where
 		Block = Block,
@@ -1425,6 +1427,8 @@ construct_runtime! {
 
 		// Pallet for sending XCM.
 		XcmPallet: pallet_xcm::{Pallet, Call, Storage, Event<T>, Origin, Config} = 99,
+
+		ParasSudoWrapper: paras_sudo_wrapper::{Pallet, Call} = 250,
 	}
 }
 
