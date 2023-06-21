@@ -748,6 +748,7 @@ fn kusama_staging_testnet_config_genesis(wasm_binary: &[u8]) -> kusama::GenesisC
 			epoch_config: Some(kusama::BABE_GENESIS_EPOCH_CONFIG),
 		},
 		grandpa: Default::default(),
+		sudo: kusama::SudoConfig { key: Some(endowed_accounts[0].clone()) },
 		im_online: Default::default(),
 		authority_discovery: kusama::AuthorityDiscoveryConfig { keys: vec![] },
 		claims: kusama::ClaimsConfig { claims: vec![], vesting: vec![] },
@@ -1452,6 +1453,9 @@ pub fn kusama_testnet_genesis(
 		xcm_pallet: Default::default(),
 		nomination_pools: Default::default(),
 		nis_counterpart_balances: Default::default(),
+		sudo: kusama::SudoConfig {
+			key: Some(get_account_id_from_seed::<sr25519::Public>("Alice")),
+		},
 	}
 }
 

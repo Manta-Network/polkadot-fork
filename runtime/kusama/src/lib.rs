@@ -675,6 +675,17 @@ impl pallet_child_bounties::Config for Runtime {
 	type WeightInfo = weights::pallet_child_bounties::WeightInfo<Runtime>;
 }
 
+// impl pallet_tips::Config for Runtime {
+// 	type MaximumReasonLength = MaximumReasonLength;
+// 	type DataDepositPerByte = DataDepositPerByte;
+// 	type Tippers = PhragmenElection;
+// 	type TipCountdown = TipCountdown;
+// 	type TipFindersFee = TipFindersFee;
+// 	type TipReportDepositBase = TipReportDepositBase;
+// 	type RuntimeEvent = RuntimeEvent;
+// 	type WeightInfo = weights::pallet_tips::WeightInfo<Runtime>;
+// }
+
 impl pallet_offences::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type IdentificationTuple = pallet_session::historical::IdentificationTuple<Self>;
@@ -956,58 +967,60 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 			ProxyType::NonTransfer => matches!(
 				c,
 				RuntimeCall::System(..) |
-				RuntimeCall::Babe(..) |
-				RuntimeCall::Timestamp(..) |
-				RuntimeCall::Indices(pallet_indices::Call::claim {..}) |
-				RuntimeCall::Indices(pallet_indices::Call::free {..}) |
-				RuntimeCall::Indices(pallet_indices::Call::freeze {..}) |
-				// Specifically omitting Indices `transfer`, `force_transfer`
-				// Specifically omitting the entire Balances pallet
-				RuntimeCall::Staking(..) |
-				RuntimeCall::Session(..) |
-				RuntimeCall::Grandpa(..) |
-				RuntimeCall::ImOnline(..) |
-				RuntimeCall::Treasury(..) |
-				RuntimeCall::Bounties(..) |
-				RuntimeCall::ChildBounties(..) |
-				RuntimeCall::ConvictionVoting(..) |
-				RuntimeCall::Referenda(..) |
-				RuntimeCall::FellowshipCollective(..) |
-				RuntimeCall::FellowshipReferenda(..) |
-				RuntimeCall::Whitelist(..) |
-				RuntimeCall::Claims(..) |
-				RuntimeCall::Utility(..) |
-				RuntimeCall::Identity(..) |
-				RuntimeCall::Society(..) |
-				RuntimeCall::Recovery(pallet_recovery::Call::as_recovered {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::vouch_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::claim_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::close_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::remove_recovery {..}) |
-				RuntimeCall::Recovery(pallet_recovery::Call::cancel_recovered {..}) |
-				// Specifically omitting Recovery `create_recovery`, `initiate_recovery`
-				RuntimeCall::Vesting(pallet_vesting::Call::vest {..}) |
-				RuntimeCall::Vesting(pallet_vesting::Call::vest_other {..}) |
-				// Specifically omitting Vesting `vested_transfer`, and `force_vested_transfer`
-				RuntimeCall::Scheduler(..) |
-				RuntimeCall::Proxy(..) |
-				RuntimeCall::Multisig(..) |
-				RuntimeCall::Nis(..) |
-				RuntimeCall::Registrar(paras_registrar::Call::register {..}) |
-				RuntimeCall::Registrar(paras_registrar::Call::deregister {..}) |
-				// Specifically omitting Registrar `swap`
-				RuntimeCall::Registrar(paras_registrar::Call::reserve {..}) |
-				RuntimeCall::Crowdloan(..) |
-				RuntimeCall::Slots(..) |
-				RuntimeCall::Auctions(..) | // Specifically omitting the entire XCM Pallet
-				RuntimeCall::VoterList(..) |
-				RuntimeCall::NominationPools(..) |
-				RuntimeCall::FastUnstake(..)
+							RuntimeCall::Babe(..) |
+							RuntimeCall::Timestamp(..) |
+							RuntimeCall::Indices(pallet_indices::Call::claim {..}) |
+							RuntimeCall::Indices(pallet_indices::Call::free {..}) |
+							RuntimeCall::Indices(pallet_indices::Call::freeze {..}) |
+							// Specifically omitting Indices `transfer`, `force_transfer`
+							// Specifically omitting the entire Balances pallet
+							RuntimeCall::Staking(..) |
+							RuntimeCall::Session(..) |
+							RuntimeCall::Grandpa(..) |
+							RuntimeCall::ImOnline(..) |
+							RuntimeCall::Treasury(..) |
+							RuntimeCall::Bounties(..) |
+							RuntimeCall::ChildBounties(..) |
+							//RuntimeCall::Tips(..) |
+							RuntimeCall::ConvictionVoting(..) |
+							RuntimeCall::Referenda(..) |
+							RuntimeCall::FellowshipCollective(..) |
+							RuntimeCall::FellowshipReferenda(..) |
+							RuntimeCall::Whitelist(..) |
+							RuntimeCall::Claims(..) |
+							RuntimeCall::Utility(..) |
+							RuntimeCall::Identity(..) |
+							RuntimeCall::Society(..) |
+							RuntimeCall::Recovery(pallet_recovery::Call::as_recovered {..}) |
+							RuntimeCall::Recovery(pallet_recovery::Call::vouch_recovery {..}) |
+							RuntimeCall::Recovery(pallet_recovery::Call::claim_recovery {..}) |
+							RuntimeCall::Recovery(pallet_recovery::Call::close_recovery {..}) |
+							RuntimeCall::Recovery(pallet_recovery::Call::remove_recovery {..}) |
+							RuntimeCall::Recovery(pallet_recovery::Call::cancel_recovered {..}) |
+							// Specifically omitting Recovery `create_recovery`, `initiate_recovery`
+							RuntimeCall::Vesting(pallet_vesting::Call::vest {..}) |
+							RuntimeCall::Vesting(pallet_vesting::Call::vest_other {..}) |
+							// Specifically omitting Vesting `vested_transfer`, and `force_vested_transfer`
+							RuntimeCall::Scheduler(..) |
+							RuntimeCall::Proxy(..) |
+							RuntimeCall::Multisig(..) |
+							RuntimeCall::Nis(..) |
+							RuntimeCall::Registrar(paras_registrar::Call::register {..}) |
+							RuntimeCall::Registrar(paras_registrar::Call::deregister {..}) |
+							// Specifically omitting Registrar `swap`
+							RuntimeCall::Registrar(paras_registrar::Call::reserve {..}) |
+							RuntimeCall::Crowdloan(..) |
+							RuntimeCall::Slots(..) |
+							RuntimeCall::Auctions(..) | // Specifically omitting the entire XCM Pallet
+							RuntimeCall::VoterList(..) |
+							RuntimeCall::NominationPools(..) |
+							RuntimeCall::FastUnstake(..)
 			),
 			ProxyType::Governance => matches!(
 				c,
 				RuntimeCall::Treasury(..) |
 					RuntimeCall::Bounties(..) |
+					//RuntimeCall::Tips(..) | 
 					RuntimeCall::Utility(..) |
 					RuntimeCall::ChildBounties(..) |
 					// OpenGov calls
@@ -1055,6 +1068,13 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 			_ => false,
 		}
 	}
+}
+
+impl runtime_common::paras_sudo_wrapper::Config for Runtime {}
+
+impl pallet_sudo::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type RuntimeCall = RuntimeCall;
 }
 
 impl pallet_proxy::Config for Runtime {
@@ -1306,8 +1326,6 @@ impl pallet_nomination_pools::Config for Runtime {
 	type MaxPointsToBalance = MaxPointsToBalance;
 }
 
-impl paras_sudo_wrapper::Config for Runtime {}
-
 construct_runtime! {
 	pub enum Runtime where
 		Block = Block,
@@ -1386,6 +1404,9 @@ construct_runtime! {
 		Bounties: pallet_bounties::{Pallet, Call, Storage, Event<T>} = 35,
 		ChildBounties: pallet_child_bounties = 40,
 
+		// // Tips module. - removed to make space for Sudo
+		// Tips: pallet_tips::{Pallet, Call, Storage, Event<T>} = 36,
+
 		// Election pallet. Only works with staking, but placed here to maintain indices.
 		ElectionProviderMultiPhase: pallet_election_provider_multi_phase::{Pallet, Call, Storage, Event<T>, ValidateUnsigned} = 37,
 
@@ -1428,7 +1449,8 @@ construct_runtime! {
 		// Pallet for sending XCM.
 		XcmPallet: pallet_xcm::{Pallet, Call, Storage, Event<T>, Origin, Config} = 99,
 
-		ParasSudoWrapper: paras_sudo_wrapper::{Pallet, Call} = 250,
+		Sudo: pallet_sudo::{Pallet, Call, Storage, Event<T>, Config<T>} = 249,
+		ParasSudoWrapper: runtime_common::paras_sudo_wrapper::{Pallet, Call} = 250,
 	}
 }
 
@@ -1546,6 +1568,7 @@ mod benches {
 		[pallet_staking, Staking]
 		[frame_system, SystemBench::<Runtime>]
 		[pallet_timestamp, Timestamp]
+		//[pallet_tips, Tips]
 		[pallet_treasury, Treasury]
 		[pallet_utility, Utility]
 		[pallet_vesting, Vesting]
