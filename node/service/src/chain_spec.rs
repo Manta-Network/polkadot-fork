@@ -689,6 +689,7 @@ fn polkadot_staging_testnet_config_genesis(wasm_binary: &[u8]) -> polkadot::Gene
 		paras: Default::default(),
 		xcm_pallet: Default::default(),
 		nomination_pools: Default::default(),
+		sudo: polkadot::SudoConfig { key: Some(endowed_accounts[0].clone()) },
 	}
 }
 
@@ -1891,6 +1892,7 @@ pub fn polkadot_testnet_genesis(
 		paras: Default::default(),
 		xcm_pallet: Default::default(),
 		nomination_pools: Default::default(),
+		sudo: polkadot::SudoConfig { key: Some(endowed_accounts[0].clone()) },
 	}
 }
 
