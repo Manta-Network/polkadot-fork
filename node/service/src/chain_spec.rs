@@ -387,6 +387,7 @@ fn polkadot_staging_testnet_config_genesis(wasm_binary: &[u8]) -> polkadot::Gene
 		paras: Default::default(),
 		xcm_pallet: Default::default(),
 		nomination_pools: Default::default(),
+		sudo: polkadot::SudoConfig { key: Some(endowed_accounts[0].clone()) },
 	}
 }
 
@@ -1313,6 +1314,7 @@ pub fn polkadot_testnet_genesis(
 
 	polkadot::GenesisConfig {
 		system: polkadot::SystemConfig { code: wasm_binary.to_vec() },
+		sudo: polkadot::SudoConfig { key: Some(endowed_accounts[0].clone()) },
 		indices: polkadot::IndicesConfig { indices: vec![] },
 		balances: polkadot::BalancesConfig {
 			balances: endowed_accounts.iter().map(|k| (k.clone(), ENDOWMENT)).collect(),

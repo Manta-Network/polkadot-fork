@@ -1281,6 +1281,11 @@ impl frame_support::traits::OnRuntimeUpgrade for InitiateNominationPools {
 
 impl paras_sudo_wrapper::Config for Runtime {}
 
+impl pallet_sudo::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type RuntimeCall = RuntimeCall;
+}
+
 construct_runtime! {
 	pub enum Runtime where
 		Block = Block,
@@ -1384,7 +1389,8 @@ construct_runtime! {
 
 		// Pallet for sending XCM.
 		XcmPallet: pallet_xcm::{Pallet, Call, Storage, Event<T>, Origin, Config} = 99,
-
+		
+		Sudo: pallet_sudo::{Pallet, Call, Storage, Event<T>, Config<T>} = 249,
 		ParasSudoWrapper: paras_sudo_wrapper::{Pallet, Call} = 250,
 	}
 }
