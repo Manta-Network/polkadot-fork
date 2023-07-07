@@ -1263,6 +1263,7 @@ fn kusama_staging_testnet_config_genesis(wasm_binary: &[u8]) -> kusama::GenesisC
 		vesting: kusama::VestingConfig { vesting: vec![] },
 		treasury: Default::default(),
 		hrmp: Default::default(),
+		sudo: kusama::SudoConfig { key: Some(endowed_accounts[0].clone()) },
 		configuration: kusama::ConfigurationConfig {
 			config: default_parachains_host_configuration(),
 		},
@@ -1981,6 +1982,7 @@ pub fn kusama_testnet_genesis(
 		xcm_pallet: Default::default(),
 		nomination_pools: Default::default(),
 		nis_counterpart_balances: Default::default(),
+		sudo: kusama::SudoConfig { key: Some(endowed_accounts[0].clone()) },
 	}
 }
 

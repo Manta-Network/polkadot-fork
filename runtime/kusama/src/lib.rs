@@ -126,7 +126,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: create_runtime_str!("kusama"),
 	impl_name: create_runtime_str!("parity-kusama"),
 	authoring_version: 2,
-	spec_version: 9370,
+	spec_version: 9371,
 	impl_version: 0,
 	#[cfg(not(feature = "disable-runtime-api"))]
 	apis: RUNTIME_API_VERSIONS,
@@ -688,16 +688,16 @@ impl pallet_child_bounties::Config for Runtime {
 	type WeightInfo = weights::pallet_child_bounties::WeightInfo<Runtime>;
 }
 
-impl pallet_tips::Config for Runtime {
-	type MaximumReasonLength = MaximumReasonLength;
-	type DataDepositPerByte = DataDepositPerByte;
-	type Tippers = PhragmenElection;
-	type TipCountdown = TipCountdown;
-	type TipFindersFee = TipFindersFee;
-	type TipReportDepositBase = TipReportDepositBase;
-	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = weights::pallet_tips::WeightInfo<Runtime>;
-}
+// impl pallet_tips::Config for Runtime {
+// 	type MaximumReasonLength = MaximumReasonLength;
+// 	type DataDepositPerByte = DataDepositPerByte;
+// 	type Tippers = PhragmenElection;
+// 	type TipCountdown = TipCountdown;
+// 	type TipFindersFee = TipFindersFee;
+// 	type TipReportDepositBase = TipReportDepositBase;
+// 	type RuntimeEvent = RuntimeEvent;
+// 	type WeightInfo = weights::pallet_tips::WeightInfo<Runtime>;
+// }
 
 impl pallet_offences::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
@@ -1005,7 +1005,7 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				RuntimeCall::Treasury(..) |
 				RuntimeCall::Bounties(..) |
 				RuntimeCall::ChildBounties(..) |
-				RuntimeCall::Tips(..) |
+				//RuntimeCall::Tips(..) |
 				RuntimeCall::ConvictionVoting(..) |
 				RuntimeCall::Referenda(..) |
 				RuntimeCall::FellowshipCollective(..) |
@@ -1047,7 +1047,8 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 					RuntimeCall::PhragmenElection(..) |
 					RuntimeCall::Treasury(..) |
 					RuntimeCall::Bounties(..) |
-					RuntimeCall::Tips(..) | RuntimeCall::Utility(..) |
+					//RuntimeCall::Tips(..) | 
+					RuntimeCall::Utility(..) |
 					RuntimeCall::ChildBounties(..) |
 					// OpenGov calls
 					RuntimeCall::ConvictionVoting(..) |
@@ -1323,6 +1324,11 @@ impl pallet_nomination_pools::Config for Runtime {
 	type MaxPointsToBalance = MaxPointsToBalance;
 }
 
+impl pallet_sudo::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type RuntimeCall = RuntimeCall;
+}
+
 construct_runtime! {
 	pub enum Runtime where
 		Block = Block,
@@ -1407,8 +1413,8 @@ construct_runtime! {
 		Bounties: pallet_bounties::{Pallet, Call, Storage, Event<T>} = 35,
 		ChildBounties: pallet_child_bounties = 40,
 
-		// Tips module.
-		Tips: pallet_tips::{Pallet, Call, Storage, Event<T>} = 36,
+		// // Tips module. - removed to make space for Sudo
+		// Tips: pallet_tips::{Pallet, Call, Storage, Event<T>} = 36,
 
 		// Election pallet. Only works with staking, but placed here to maintain indices.
 		ElectionProviderMultiPhase: pallet_election_provider_multi_phase::{Pallet, Call, Storage, Event<T>, ValidateUnsigned} = 37,
@@ -1451,6 +1457,7 @@ construct_runtime! {
 		// Pallet for sending XCM.
 		XcmPallet: pallet_xcm::{Pallet, Call, Storage, Event<T>, Origin, Config} = 99,
 
+		Sudo: pallet_sudo::{Pallet, Call, Storage, Event<T>, Config<T>} = 249,
 		ParasSudoWrapper: paras_sudo_wrapper::{Pallet, Call} = 250,
 	}
 }
@@ -1574,7 +1581,7 @@ mod benches {
 		[pallet_staking, Staking]
 		[frame_system, SystemBench::<Runtime>]
 		[pallet_timestamp, Timestamp]
-		[pallet_tips, Tips]
+		//[pallet_tips, Tips]
 		[pallet_treasury, Treasury]
 		[pallet_utility, Utility]
 		[pallet_vesting, Vesting]

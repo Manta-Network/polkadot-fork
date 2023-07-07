@@ -92,6 +92,7 @@ pallet-nomination-pools-benchmarking = { git = "https://github.com/paritytech/su
 frame-system-benchmarking = { git = "https://github.com/paritytech/substrate", default-features = false, optional = true , branch = "polkadot-v0.9.37" }
 pallet-election-provider-support-benchmarking = { git = "https://github.com/paritytech/substrate", default-features = false, optional = true , branch = "polkadot-v0.9.37" }
 hex-literal = { version = "0.3.4", optional = true }
+pallet-sudo = { git = "https://github.com/paritytech/substrate", default-features = false , branch = "polkadot-v0.9.37" }
 
 runtime-common = { package = "polkadot-runtime-common", path = "../common", default-features = false }
 runtime-parachains = { package = "polkadot-runtime-parachains", path = "../parachains", default-features = false }
@@ -177,6 +178,7 @@ std = [
 	"pallet-whitelist/std",
 	"pallet-babe/std",
 	"pallet-xcm/std",
+	"pallet-sudo/std",
 	"sp-mmr-primitives/std",
 	"sp-runtime/std",
 	"sp-staking/std",
@@ -294,6 +296,7 @@ try-runtime = [
 	"pallet-babe/try-runtime",
 	"pallet-xcm/try-runtime",
 	"runtime-common/try-runtime",
+	"pallet-sudo/try-runtime",
 ]
 # When enabled, the runtime API will not be build.
 #
