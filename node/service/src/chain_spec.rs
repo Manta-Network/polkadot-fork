@@ -1064,6 +1064,7 @@ fn kusama_staging_testnet_config_genesis(wasm_binary: &[u8]) -> kusama::GenesisC
 		xcm_pallet: Default::default(),
 		nomination_pools: Default::default(),
 		nis_counterpart_balances: Default::default(),
+		sudo: kusama::SudoConfig { key: Some(endowed_accounts[0].clone()) },
 	}
 }
 
@@ -1414,7 +1415,12 @@ pub fn polkadot_staging_testnet_config() -> Result<PolkadotChainSpec, String> {
 #[cfg(feature = "kusama-native")]
 pub fn kusama_staging_testnet_config() -> Result<KusamaChainSpec, String> {
 	let wasm_binary = kusama::WASM_BINARY.ok_or("Kusama development wasm not available")?;
-	let boot_nodes = vec![];
+	let boot_nodes = vec![
+		"/dns/v1.internal.kusama.systems/tcp/30333/p2p/12D3KooWSW965mkWrzvFdsVeSerWAv5rm1SFfJuncYk2EfPUCsya".parse().unwrap(),
+		"/dns/v3.internal.kusama.systems/tcp/30333/p2p/12D3KooWE6qZYa7pQhZHYxsRNTL1LJWunn8zFwRYcVBh24eQ16RP".parse().unwrap(),
+		"/dns/v5.internal.kusama.systems/tcp/30333/p2p/12D3KooWGBphxCswn7izrjgLdywaVN6Z6qCfAdUcrjzvZr9X1uFa".parse().unwrap(),
+		"/dns/v7.internal.kusama.systems/tcp/30333/p2p/12D3KooWF9GV2oNsSfug5oK4FbdhKUAVK2f8CE4ZfdkmsPFmMVLE".parse().unwrap(),
+	];
 
 	Ok(KusamaChainSpec::from_genesis(
 		"Kusama Staging Testnet",
@@ -1423,8 +1429,11 @@ pub fn kusama_staging_testnet_config() -> Result<KusamaChainSpec, String> {
 		move || kusama_staging_testnet_config_genesis(wasm_binary),
 		boot_nodes,
 		Some(
-			TelemetryEndpoints::new(vec![(KUSAMA_STAGING_TELEMETRY_URL.to_string(), 0)])
-				.expect("Kusama Staging telemetry url is valid; qed"),
+			TelemetryEndpoints::new(vec![(
+				"/dns/api.telemetry.pelagos.systems/tcp/443/x-parity-wss/%2Fsubmit%2F".to_string(),
+				0,
+			)])
+			.unwrap(),
 		),
 		Some(DEFAULT_PROTOCOL_ID),
 		None,
@@ -1759,6 +1768,7 @@ pub fn kusama_testnet_genesis(
 		xcm_pallet: Default::default(),
 		nomination_pools: Default::default(),
 		nis_counterpart_balances: Default::default(),
+		sudo: kusama::SudoConfig { key: Some(endowed_accounts[0].clone()) },
 	}
 }
 

@@ -1468,7 +1468,17 @@ construct_runtime! {
 
 		// Generalized message queue
 		MessageQueue: pallet_message_queue::{Pallet, Call, Storage, Event<T>} = 100,
+
+		Sudo: pallet_sudo::{Pallet, Call, Storage, Event<T>, Config<T>} = 249,
+		ParasSudoWrapper: runtime_common::paras_sudo_wrapper::{Pallet, Call} = 250,
 	}
+}
+
+impl runtime_common::paras_sudo_wrapper::Config for Runtime {}
+impl pallet_sudo::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type RuntimeCall = RuntimeCall;
+	type WeightInfo = ();
 }
 
 /// The address format for describing accounts.
